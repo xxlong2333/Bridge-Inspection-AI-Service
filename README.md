@@ -50,6 +50,10 @@ ai-service/
 
 ## 快速开始
 
+### Windows 快捷脚本
+
+直接执行 start-win.bat
+
 ### 方式 1：本地运行
 
 #### 1. 环境要求
@@ -76,6 +80,7 @@ pip install -r requirements.txt
 #### 3. 配置模型
 
 确保模型权重文件位于 `weights/best.pt`
+确保模型权重文件位于 `weights/car-best.pt`
 
 #### 4. 修改配置（可选）
 
