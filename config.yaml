@@ -1,0 +1,89 @@
+# AI服务配置文件
+
+# 服务配置
+server:
+  host: "0.0.0.0"
+  port: 5000
+  workers: 1
+  reload: false
+  log_level: "info"
+
+# 桥梁缺陷检测模型配置
+model:
+  weights_path: "weights/best.pt"
+  device: "cuda" # cuda, cpu, mps(Mac M1/M2)
+  conf_threshold: 0.25 # 置信度阈值
+  iou_threshold: 0.45 # NMS IoU阈值
+  max_det: 300 # 最大检测数量
+
+  # 类别名称（根据你的训练数据调整）
+  classes:
+    0: "corrosion_stain" # 腐蚀污渍
+    1: "crack" # 裂缝
+    2: "efflorescence" #风化
+    3: "exposed_reinforcement" # 外露钢筋
+    4: "spalling" # 混凝土剥落
+
+# 车流量检测模型配置
+traffic_model:
+  weights_path: "weights/car-best.pt"
+  device: "cuda" # cuda, cpu, mps(Mac M1/M2)
+  conf_threshold: 0.25 # 置信度阈值
+  iou_threshold: 0.45 # NMS IoU阈值
+  max_det: 300 # 最大检测数量
+  use_half: true # 是否使用FP16半精度
+
+  # 车辆类别名称（根据你的训练数据调整）
+  classes:
+    0: "car" # 小汽车
+    1: "truck" # 卡车
+    2: "bus" # 公交车
+
+# 视频流配置
+video:
+  frame_skip: 1 # 每隔多少帧处理一次（1=每帧都处理，2=隔一帧）
+  max_fps: 30 # 最大处理帧率
+  timeout: 30 # 视频流超时时间（秒）
+  buffer_size: 10 # 帧缓冲区大小
+
+  # 视频编码
+  output_codec: "mp4v" # 输出视频编码
+
+# 图像预处理
+image:
+  resize_width: 640 # 推理时图像宽度
+  resize_height: 640 # 推理时图像高度
+
+# 结果可视化
+visualization:
+  box_thickness: 2 # 边界框线条粗细
+  font_scale: 0.6 # 字体大小
+  show_conf: true # 是否显示置信度
+  show_class: true # 是否显示类别名称
+
+  # 桥梁缺陷类别颜色（BGR格式）
+  colors:
+    corrosion_stain: [0, 255, 255] # 腐蚀污渍  蓝色
+    crack: [255, 0, 0] # 裂缝 红色
+    efflorescence: [0, 255, 0] # 风化 绿色
+    exposed_reinforcement: [255, 0, 255] # 外露钢筋 紫色
+    spalling: [255, 255, 0] # 剥落 改成黄色
+
+  # 车辆类别颜色（BGR格式）
+  traffic_colors:
+    car: [0, 255, 0] # 小汽车 绿色
+    truck: [0, 0, 255] # 卡车 红色
+    bus: [255, 0, 0] # 公交车 蓝色
+
+# 性能配置
+performance:
+  use_half: true # 是否使用FP16半精度（GPU加速）
+  max_concurrent: 3 # 最大并发检测数
+  cache_results: false # 是否缓存结果
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>"
+  rotation: "100 MB"
+  retention: "7 days"
